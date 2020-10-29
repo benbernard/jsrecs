@@ -1,1 +1,5 @@
 1. Support json5
+2. precommit checks
+3. setup tests
+4. operation module system?
+5. module to cli options config?

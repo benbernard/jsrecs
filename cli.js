@@ -2,4 +2,4 @@
 
 import InputStream from "./lib/inputStream.js";
 
-console.log("done");
+console.log("cli done");
