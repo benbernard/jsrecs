@@ -1,0 +1,34 @@
+{
+  "name": "jsrecs",
+  "version": "1.0.0",
+  "description": "Commandline tools for data manipulation",
+  "main": "recs.js",
+  "type":"module",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "json",
+    "recs",
+    "recordstream",
+    "jsonl",
+    "ndjson"
+  ],
+  "author": "Ben Bernard",
+  "license": "MIT",
+  "dependencies": {
+    "ld-jsonstream": "^2.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^7.12.1",
+    "mocha": "^8.2.0",
+    "prettier": "^2.1.2"
+  },
+  "bin": {
+    "jsrecs": "./cli.js"
+  }
+}
