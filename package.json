@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Commandline tools for data manipulation",
   "main": "recs.js",
-  "type":"module",
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
@@ -20,7 +20,9 @@
   "author": "Ben Bernard",
   "license": "MIT",
   "dependencies": {
-    "ld-jsonstream": "^2.0.2"
+    "ld-jsonstream": "^2.0.2",
+    "lodash": "^4.17.20",
+    "stream-collect": "^2.1.5"
   },
   "devDependencies": {
     "chai": "^4.2.0",

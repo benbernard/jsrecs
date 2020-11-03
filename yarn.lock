@@ -693,7 +693,7 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash@^4.17.14, lodash@^4.17.19:
+lodash@^4.17.14, lodash@^4.17.19, lodash@^4.17.20:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -972,6 +972,13 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
+
+stream-collect@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/stream-collect/-/stream-collect-2.1.5.tgz#101ddfe454be2842500f65e184925beaecd8ea8f"
+  integrity sha512-f6zWewcLqRyghmhIxIc1W8AxPrXi1GmDxkCqbJ6LG2Uf6jWcNa3DwqG3hN4Pm1vdFXn8xS4KYimo2A/HihOKKA==
+  dependencies:
+    debug "^4.1.1"
 
 "string-width@^1.0.2 || 2":
   version "2.1.1"
