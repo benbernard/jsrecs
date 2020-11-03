@@ -18,3 +18,11 @@ chai.use((_chai, utils) => {
     new Assertion(data).to.be.deep.equal(records);
   });
 });
+
+export async function collectStream(stream) {
+  return new Promise((resolve, reject) => {
+    let arr = [];
+    stream.on("data", data => arr.push(data));
+    stream.on("end", () => resolve(arr));
+  });
+}
