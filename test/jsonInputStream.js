@@ -1,5 +1,5 @@
 import { expect, collectStream } from "./testSetup.js";
-import InputStream from "../lib/inputStream.js";
+import JSONInputStream from "../lib/jsonInputStream.js";
 import { Readable } from "stream";
 import collect from "stream-collect";
 
@@ -15,7 +15,7 @@ describe("Regular records", () => {
 
   it("should take multiple streams", async () => {
     let streams = [
-      Readable.from(['{"foo": 1}\n{"bar": 2}\n\n']),
+      Readable.from(['{"foo": 1}\n{"bar": 2}\n']),
       Readable.from(['{"zip": "foo"}']),
     ];
 
@@ -41,6 +41,6 @@ describe("Regular records", () => {
 });
 
 function streamRecords(streams) {
-  const input = new InputStream({ streams });
+  const input = new JSONInputStream({ streams });
   return collectStream(input);
 }
