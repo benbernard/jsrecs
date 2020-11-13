@@ -1,7 +1,7 @@
 import { expect, collectStream } from "./testSetup.js";
-import JSONInputStream from "../lib/jsonInputStream.js";
 import { Readable } from "stream";
 import collect from "stream-collect";
+import { recordStreamFromArgs } from "../lib/streamUtils.js";
 
 describe("Regular records", () => {
   it("should load line-wise records", async () => {
@@ -41,6 +41,6 @@ describe("Regular records", () => {
 });
 
 function streamRecords(streams) {
-  const input = new JSONInputStream({ streams });
+  const input = recordStreamFromArgs({ streams });
   return collectStream(input);
 }
