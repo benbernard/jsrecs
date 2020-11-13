@@ -26,6 +26,7 @@
     "stream-collect": "^2.1.5"
   },
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "chai": "^4.2.0",
     "eslint": "^7.12.1",
     "mocha": "^8.2.0",

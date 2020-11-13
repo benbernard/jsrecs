@@ -3,7 +3,7 @@ import { Readable } from "stream";
 import collect from "stream-collect";
 import { recordStreamFromArgs } from "../lib/streamUtils.js";
 
-describe("Regular records", () => {
+describe("RecordStream", () => {
   it("should load line-wise records", async () => {
     let streams = [Readable.from(['{"foo": 1}\n{"bar": 2}'])];
 
