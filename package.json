@@ -8,7 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "`npm bin`/mocha --recursive",
+    "testd": "node inspect `npm bin`/mocha --recursive"
   },
   "keywords": [
     "json",
@@ -20,9 +21,11 @@
   "author": "Ben Bernard",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.12.3",
     "ld-jsonstream": "^2.0.2",
     "lodash": "^4.17.20",
     "multistream": "^4.0.1",
+    "outdent": "^0.7.1",
     "stream-collect": "^2.1.5"
   },
   "devDependencies": {

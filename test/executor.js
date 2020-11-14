@@ -23,7 +23,9 @@ describe("Executor", () => {
 
   it("should return an expression", () => {
     let r = new Record({ a: "ben" });
-    let exe = new Executor({ code: "r.data.a" });
+    let exe = new Executor({ code: "r.a" });
     expect(exe.run(r)).to.equal("ben");
   });
+
+  // TODO: test error cases
 });
