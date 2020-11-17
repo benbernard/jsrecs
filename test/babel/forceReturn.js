@@ -52,4 +52,14 @@ describe("FunctionWrapper Plugin", () => {
       };`
     );
   });
+
+  it("should transform not transform an final statement", () => {
+    testCode(
+      "if (true) 3",
+      outdent`
+      wrapper = function _jsrecsExecutor(r, LINE, _) {
+        if (true) 3;
+      };`
+    );
+  });
 });
