@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.12.3",
+    "babel-plugin-implicit-return": "^1.0.1",
     "ld-jsonstream": "^2.0.2",
     "lodash": "^4.17.20",
     "multistream": "^4.0.1",
