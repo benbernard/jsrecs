@@ -2,6 +2,11 @@ import { expect } from "../testSetup.js";
 import recordAccess from "../../lib/babel/recordAccess.js";
 import babel from "@babel/core";
 import outdent from "outdent";
+import { testCode as babelTestCode } from "./helper.js";
+
+const testCode = function (input, expected) {
+  return babelTestCode(input, expected, { plugins: [recordAccess] });
+};
 
 describe("RecordAccess Plugin", () => {
   it("should transform code", () => {
@@ -25,9 +30,4 @@ describe("RecordAccess Plugin", () => {
       `
     );
   });
-
-  function testCode(input, expected) {
-    let { code } = babel.transform(input, { plugins: [recordAccess] });
-    expect(code).to.equal(expected);
-  }
 });
