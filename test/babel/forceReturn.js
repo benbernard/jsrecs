@@ -1,5 +1,5 @@
 import { expect } from "../testSetup.js";
-import functionWrapper from "../../lib/babel/functionWrapper.js";
+import forceReturn from "../../lib/babel/forceReturn.js";
 import { testCode as babelTestCode } from "./helper.js";
 import outdent from "outdent";
 
@@ -7,7 +7,7 @@ const testCode = function (input, expected) {
   return babelTestCode(
     `wrapper = function _jsrecsExecutor(r, LINE, _) { ${input} }`,
     expected,
-    { plugins: [functionWrapper] }
+    { plugins: [forceReturn] }
   );
 };
 
