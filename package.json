@@ -23,9 +23,11 @@
   "dependencies": {
     "@babel/core": "^7.12.3",
     "babel-plugin-implicit-return": "^1.0.1",
+    "commander": "^6.2.0",
     "ld-jsonstream": "^2.0.2",
     "lodash": "^4.17.20",
     "multistream": "^4.0.1",
+    "ndjson": "^2.0.0",
     "outdent": "^0.7.1",
     "stream-collect": "^2.1.5"
   },

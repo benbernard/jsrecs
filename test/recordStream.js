@@ -7,7 +7,7 @@ describe("RecordStream", () => {
   it("should load line-wise records", async () => {
     let streams = [Readable.from(['{"foo": 1}\n{"bar": 2}'])];
 
-    expect(await streamRecords(streams)).to.be.records([
+    expect(await streamRecordsFromStreams(streams)).to.be.records([
       { foo: 1 },
       { bar: 2 },
     ]);
@@ -19,7 +19,7 @@ describe("RecordStream", () => {
       Readable.from(['{"zip": "foo"}']),
     ];
 
-    expect(await streamRecords(streams)).to.be.records([
+    expect(await streamRecordsFromStreams(streams)).to.be.records([
       { foo: 1 },
       { bar: 2 },
       { zip: "foo" },
@@ -32,15 +32,25 @@ describe("RecordStream", () => {
       Readable.from(['{"zip": "foo"}']),
     ];
 
-    expect(await streamRecords(streams)).to.be.records([
+    expect(await streamRecordsFromStreams(streams)).to.be.records([
       { foo: 1 },
       { bar: 2 },
       { zip: "foo" },
     ]);
   });
+
+  it("should read from files", async () => {
+    expect(
+      await streamRecords({ files: ["test/files/simple.recs"] })
+    ).to.be.records([{ a: 1 }, { a: 2 }]);
+  });
 });
 
-function streamRecords(streams) {
-  const input = recordStreamFromArgs({ streams });
+function streamRecords(opts) {
+  const input = recordStreamFromArgs(opts);
   return collectStream(input);
+}
+
+function streamRecordsFromStreams(streams) {
+  return streamRecords({ streams });
 }
