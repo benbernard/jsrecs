@@ -1,5 +1,8 @@
 const chai = require("chai");
+const path = require("path");
+
 const Record = prequire("lib/record");
+const { projpath } = prequire("appSetup");
 
 exports.chai = chai;
 global.expect = exports.expect = chai.expect;
@@ -26,4 +29,8 @@ exports.collectStream = async function collectStream(stream) {
     stream.on("data", data => arr.push(data));
     stream.on("end", () => resolve(arr));
   });
+};
+
+exports.testFile = function (file) {
+  return projpath(path.join("test/files", file));
 };

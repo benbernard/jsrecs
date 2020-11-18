@@ -2,13 +2,13 @@
 
 require("./appSetup");
 
-const { Command } = require("commander");
+const commander = require("commander");
 
-const { Command: RecsCommand } = prequire("lib/commands");
+const { Command } = prequire("lib/commands");
 
-const program = new Command();
+const program = new commander.Command();
 program.version("0.0.1");
 
-RecsCommand.buildProgram(program);
+Command.buildProgram(program);
 
 program.parse(process.argv);
