@@ -890,11 +890,6 @@ json5@^2.1.2:
   dependencies:
     minimist "^1.2.5"
 
-ld-jsonstream@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/ld-jsonstream/-/ld-jsonstream-2.0.2.tgz#561b6fd7213efc66912b28aff2c6453f289755f4"
-  integrity sha512-uxS3/uRlg5Fknd9Yp3bu3frAh2MXanIPyZf1ZuKU6QoVREH2yTJ/eJO4Cw2PA4GK1UOo2Kr0oR5d54SLV3z06A==
-
 levn@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.4.1.tgz#ae4562c007473b932a6200d403268dd2fffc6ade"
