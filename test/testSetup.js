@@ -1,7 +1,8 @@
-import chai from "chai";
-import Record from "../lib/record.js";
+const chai = require("chai");
+const Record = prequire("lib/record");
 
-export const { expect } = chai;
+exports.chai = chai;
+global.expect = exports.expect = chai.expect;
 
 chai.use((_chai, utils) => {
   const Assertion = chai.Assertion;
@@ -19,10 +20,10 @@ chai.use((_chai, utils) => {
   });
 });
 
-export async function collectStream(stream) {
+exports.collectStream = async function collectStream(stream) {
   return new Promise((resolve, reject) => {
     let arr = [];
     stream.on("data", data => arr.push(data));
     stream.on("end", () => resolve(arr));
   });
-}
+};

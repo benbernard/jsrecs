@@ -1,6 +1,5 @@
-import Executor from "../lib/executor.js";
-import Record from "../lib/record.js";
-import { expect } from "./testSetup.js";
+const Executor = prequire("lib/executor");
+const Record = prequire("lib/record");
 
 describe("Executor", () => {
   it("should allow record modification", () => {

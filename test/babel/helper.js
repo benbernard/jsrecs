@@ -1,7 +1,6 @@
-import babel from "@babel/core";
-import { expect } from "../testSetup.js";
+const babel = require("@babel/core");
 
-export function testCode(input, expected, opts) {
+exports.babelTestCode = function testCode(input, expected, opts) {
   let { code } = babel.transform(input, opts);
   expect(code).to.equal(expected);
-}
+};

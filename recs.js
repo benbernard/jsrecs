@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
-import { Command as RecsCommand } from "./lib/commands/index.js";
-import { Command } from "commander";
+require("./appSetup");
+
+const { Command } = require("commander");
+
+const { Command: RecsCommand } = prequire("lib/commands");
 
 const program = new Command();
 program.version("0.0.1");

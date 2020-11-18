@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import Benchmark from "benchmark";
-import Record from "./lib/record.js";
+const Benchmark = require('benchmark');
+const Record = require('./lib/record');
 
 const suite = new Benchmark.Suite();
 

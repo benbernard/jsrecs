@@ -1,8 +1,6 @@
-import { expect } from "../testSetup.js";
-import recordAccess from "../../lib/babel/recordAccess.js";
-import babel from "@babel/core";
-import outdent from "outdent";
-import { testCode as babelTestCode } from "./helper.js";
+const outdent = require("outdent");
+const recordAccess = prequire("lib/babel/recordAccess");
+const { babelTestCode } = require("./helper");
 
 const testCode = function (input, expected) {
   return babelTestCode(input, expected, { plugins: [recordAccess] });

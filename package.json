@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Commandline tools for data manipulation",
   "main": "recs.js",
-  "type": "module",
   "directories": {
     "lib": "lib"
   },
@@ -28,6 +27,7 @@
     "multistream": "^4.0.1",
     "ndjson": "^2.0.0",
     "outdent": "^0.7.1",
+    "require-dir": "^1.2.0",
     "stream-collect": "^2.1.5"
   },
   "devDependencies": {

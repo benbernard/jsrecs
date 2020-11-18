@@ -1,7 +1,6 @@
-import { expect, collectStream } from "./testSetup.js";
-import { Readable } from "stream";
-import collect from "stream-collect";
-import { recordStreamFromArgs } from "../lib/streamUtils.js";
+const { Readable } = require("stream");
+const { collectStream } = prequire("test/testSetup");
+const { recordStreamFromArgs } = prequire("lib/streamUtils.js");
 
 describe("RecordStream", () => {
   it("should load line-wise records", async () => {
