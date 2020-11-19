@@ -1,12 +1,12 @@
 const { Readable } = require("stream");
 const { collectStream } = prequire("test/testSetup");
-const { recordStreamFromArgs } = prequire("lib/streamUtils.js");
+const { recordGenerator } = prequire("lib/streamUtils.js");
 
 describe("RecordStream", () => {
   it("should load line-wise records", async () => {
     let streams = [Readable.from(['{"foo": 1}\n{"bar": 2}'])];
 
-    expect(await streamRecordsFromStreams(streams)).to.be.records([
+    expect(await streamRecords({ streams })).to.be.records([
       { foo: 1 },
       { bar: 2 },
     ]);
@@ -18,7 +18,7 @@ describe("RecordStream", () => {
       Readable.from(['{"zip": "foo"}']),
     ];
 
-    expect(await streamRecordsFromStreams(streams)).to.be.records([
+    expect(await streamRecords({ streams })).to.be.records([
       { foo: 1 },
       { bar: 2 },
       { zip: "foo" },
@@ -31,7 +31,7 @@ describe("RecordStream", () => {
       Readable.from(['{"zip": "foo"}']),
     ];
 
-    expect(await streamRecordsFromStreams(streams)).to.be.records([
+    expect(await streamRecords({ streams })).to.be.records([
       { foo: 1 },
       { bar: 2 },
       { zip: "foo" },
@@ -45,11 +45,11 @@ describe("RecordStream", () => {
   });
 });
 
-function streamRecords(opts) {
-  const input = recordStreamFromArgs(opts);
-  return collectStream(input);
-}
+async function streamRecords(opts) {
+  let records = [];
+  for await (let record of recordGenerator(opts)) {
+    records.push(record);
+  }
 
-function streamRecordsFromStreams(streams) {
-  return streamRecords({ streams });
+  return records;
 }

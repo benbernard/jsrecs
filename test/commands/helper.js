@@ -1,6 +1,6 @@
 const commander = require("commander");
 const Command = prequire("lib/command");
-const stream = require("stream");
+const { GeneratorStream } = prequire("lib/generatorStream");
 
 exports.runCommand = function (args) {
   const program = new commander.Command();
@@ -10,32 +10,40 @@ exports.runCommand = function (args) {
   return program.lastCommandInstance;
 };
 
+class CollectingOutputStream extends GeneratorStream {
+  constructor() {
+    super();
+    this.records = [];
+  }
+
+  handle(record) {
+    this.records.push(record);
+  }
+}
+
 exports.testifyCommand = function (klass) {
   const spec = klass.spec;
 
   class SubClass extends klass {
-    jsonOutputStream() {
-      const outputRecords = (this.outputRecords = []);
-
-      console.log("setting up test output stream");
-
-      const collectingStream = new stream.Writable({
-        objectMode: true,
-        write(obj) {
-          outputRecords.push(obj);
-          console.log("got record");
-        },
-      });
-
+    constructor(...args) {
+      super(...args);
       this.donePromise = new Promise((resolve, reject) => {
-        collectingStream.on("error", reject);
-        collectingStream.on("finish", () => {
-          console.log("end");
-          resolve(outputRecords);
-        });
+        this.resolve = resolve;
+        this.reject = reject;
       });
+    }
 
-      return collectingStream;
+    async run(...args) {
+      try {
+        await super.run(...args);
+        this.resolve(this.outputGenerator().records);
+      } catch (err) {
+        this.reject(err);
+      }
+    }
+
+    outputGenerator() {
+      return (this._outputGenerator ??= new CollectingOutputStream());
     }
   }
 

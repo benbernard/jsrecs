@@ -14,7 +14,6 @@ describe("Xform Command", () => {
     ]);
 
     let records = await lastCommand.donePromise;
-    console.log("test", records);
 
     expect(lastCommand).to.be.instanceof(Xform);
     expect();
