@@ -9,13 +9,32 @@ describe("Xform Command", () => {
   it("should instantiate xform command", async () => {
     const lastCommand = runCommand([
       "xform",
-      'r.a = "foo"',
+      'r.b = "foo"',
       testFile("simple.recs"),
     ]);
 
     let records = await lastCommand.donePromise;
 
     expect(lastCommand).to.be.instanceof(Xform);
-    expect();
+    expect(records).to.be.records([
+      { a: 1, b: "foo" },
+      { a: 2, b: "foo" },
+    ]);
+  });
+
+  it("should allow global variables", async () => {
+    const lastCommand = runCommand([
+      "xform",
+      "global.count ??=0; count++; r.b = count",
+      testFile("simple.recs"),
+    ]);
+
+    let records = await lastCommand.donePromise;
+
+    expect(lastCommand).to.be.instanceof(Xform);
+    expect(records).to.be.records([
+      { a: 1, b: 1 },
+      { a: 2, b: 2 },
+    ]);
   });
 });
