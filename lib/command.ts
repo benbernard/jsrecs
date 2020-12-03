@@ -84,7 +84,7 @@ export default class Command {
     }
 
     subclass.spec = spec;
-    Command.commands[spec] = subclass;
+    Command.commands.set(spec, subclass);
   }
 
   static buildProgram(

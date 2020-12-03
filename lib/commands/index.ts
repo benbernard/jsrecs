@@ -11,7 +11,7 @@ import fs from "fs";
 let filenames = new Set();
 
 // Check that all commands specify a non-default filename
-for (let command of Command.commands.values()) {
+for (let [spec, command] of Command.commands) {
   if (command.hasDefaultFilename()) {
     throw new Error(
       `${command} with spec ${command.spec} has default filename!`
@@ -23,6 +23,7 @@ for (let command of Command.commands.values()) {
 
 // Check that all paths were imported
 fs.readdirSync(__dirname).forEach(file => {
+  if (file === "index.js") return;
   if (!filenames.has(file)) {
     throw new Error(
       `Could not find ${file} in command registry, did you remember to export it in index.ts?`
