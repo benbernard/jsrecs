@@ -1,11 +1,18 @@
-const chai = require("chai");
-const path = require("path");
+import Chai from "chai";
+import path = require("path");
+import streams from "stream";
 
-const Record = prequire("lib/record");
-const { projpath } = prequire("appSetup");
+import Record from "lib/record";
+import { projpath } from "lib/appSetup";
 
-exports.chai = chai;
-global.expect = exports.expect = chai.expect;
+export const chai = Chai;
+
+declare global {
+  var expect: typeof chai.expect;
+}
+
+export const expect = chai.expect;
+global.expect = expect;
 
 chai.use((_chai, utils) => {
   const Assertion = chai.Assertion;
@@ -23,14 +30,16 @@ chai.use((_chai, utils) => {
   });
 });
 
-exports.collectStream = async function collectStream(stream) {
+export async function collectStream(
+  stream: streams.Stream
+): Promise<Array<Record>> {
   return new Promise((resolve, reject) => {
     let arr = [];
     stream.on("data", data => arr.push(data));
     stream.on("end", () => resolve(arr));
   });
-};
+}
 
-exports.testFile = function (file) {
+export function testFile(file: string): string {
   return projpath(path.join("test/files", file));
-};
+}

@@ -1,7 +1,3 @@
-const { GeneratorStream } = prequire("lib/generatorStream");
+import { GeneratorStream } from "lib/generatorStream";
 
-exports.TransformOperation = class TransformOperation extends GeneratorStream {
-  async handle(record) {
-    throw new Error("Subclass must implement");
-  }
-};
+export class TransformOperation<S, T> extends GeneratorStream<S, T> {}

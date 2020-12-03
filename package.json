@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "`npm bin`/mocha --recursive",
-    "testd": "node inspect `npm bin`/mocha --recursive"
+    "testd": "node inspect `npm bin`/mocha --recursive",
+    "lint": "npx eslint --ext ts ."
   },
   "keywords": [
     "json",
@@ -28,9 +29,16 @@
     "ndjson": "^2.0.0",
     "outdent": "^0.7.1",
     "require-dir": "^1.2.0",
-    "stream-collect": "^2.1.5"
+    "stream-collect": "^2.1.5",
+    "typescript": "^4.1.2"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.1.12",
+    "@types/lodash": "^4.14.165",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.9",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "benchmark": "^2.1.4",
     "chai": "^4.2.0",
     "eslint": "^7.12.1",

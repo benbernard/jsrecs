@@ -1,16 +1,17 @@
-const fs = require("fs");
-const MultiStream = require("multistream");
-const { Readable, Writable } = require("stream");
-const ndjson = require("ndjson");
-const Record = prequire("lib/record");
-const { GeneratorStream } = prequire("lib/generatorStream");
+import * as fs from "fs";
+import MultiStream from "multistream";
+import { Readable, Writable, Stream } from "stream";
+import ndjson from "ndjson";
+
+import { Record, RecordData } from "lib/record";
+import { GeneratorStream } from "lib/generatorStream";
 
 function multiStreamForArgs({
   files = [],
   streams = [process.stdin],
   separator = "",
-} = {}) {
-  let originStreams = [...streams];
+} = {}): MultiStream {
+  let originStreams: Array<Readable | (() => Stream)> = [...streams];
   if (files.length > 0) {
     originStreams = files.map(path => () => s(fs.createReadStream(path)));
   }
@@ -24,7 +25,7 @@ function multiStreamForArgs({
   return s(new MultiStream(separatedStreams));
 }
 
-function objStreamFromArgs(argOpts = {}) {
+function objStreamFromArgs(argOpts = {}): ReturnType<ndjson.parse> {
   const multiStream = multiStreamForArgs(argOpts);
 
   const stream = s(ndjson.parse());
@@ -33,14 +34,13 @@ function objStreamFromArgs(argOpts = {}) {
   return stream;
 }
 
-class RecordGeneratorStream extends GeneratorStream {
-  async handle(obj) {
+export class RecordGeneratorStream extends GeneratorStream<RecordData, Record> {
+  async handle(obj: RecordData): Promise<Record> {
     return new Record(obj);
   }
 }
-exports.RecordGeneratorStream = RecordGeneratorStream;
 
-function recordGenerator(argOpts = {}) {
+function recordGenerator(argOpts = {}): RecordGeneratorStream {
   let objStream = objStreamFromArgs({
     separator: "\n",
     ...argOpts,
@@ -49,16 +49,11 @@ function recordGenerator(argOpts = {}) {
   return new RecordGeneratorStream({ generator: objStream });
 }
 
-function s(stream) {
+function s<T extends Stream>(stream: T): T {
   stream.on("error", err => {
     throw err;
   });
   return stream;
 }
 
-module.exports = {
-  multiStreamForArgs,
-  objStreamFromArgs,
-  recordGenerator,
-  s,
-};
+export { multiStreamForArgs, objStreamFromArgs, recordGenerator, s };

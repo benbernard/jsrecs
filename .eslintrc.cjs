@@ -1,10 +1,13 @@
 module.exports = {
+  root: true,
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2021,
+    ecmaVersion: 2020,
   },
+  plugins: ["@typescript-eslint"],
   env: {
     node: true,
-    es2021: true,
+    es2020: true,
     mocha: true,
   },
   globals: {
@@ -12,8 +15,14 @@ module.exports = {
     prequire: false,
     expect: false,
   },
-  extends: "eslint:recommended",
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+  ],
   rules: {
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "no-undef": ["error", { typeof: false }],
     "no-unused-vars": "off",
     "accessor-pairs": "error",
@@ -176,7 +185,6 @@ module.exports = {
     "no-useless-call": "error",
     "no-useless-computed-key": "error",
     "no-useless-concat": "error",
-    "no-useless-constructor": "error",
     "no-useless-escape": "error",
     "no-useless-rename": "error",
     "no-var": "off",

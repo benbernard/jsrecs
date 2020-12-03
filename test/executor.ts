@@ -1,5 +1,7 @@
-const Executor = prequire("lib/executor");
-const Record = prequire("lib/record");
+export {};
+
+import Executor from "lib/executor";
+import Record from "lib/record";
 
 describe("Executor", () => {
   it("should allow record modification", () => {

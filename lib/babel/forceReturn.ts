@@ -10,7 +10,15 @@
 //   return r.b -> return r.b // No change needed
 //   if (true) 3; -> if (true) 3; // cannot return an if
 //
-module.exports = function ({ types: t }) {
+
+import { Visitor, Node } from "@babel/traverse";
+import * as BabelTypes from "@babel/types";
+
+export default function ({
+  types: t,
+}: {
+  types: typeof BabelTypes;
+}): { visitor: Visitor<void> } {
   const id = name => t.identifier(name);
 
   function forceFunctionReturn(nodeList) {
@@ -39,4 +47,4 @@ module.exports = function ({ types: t }) {
       },
     },
   };
-};
+}

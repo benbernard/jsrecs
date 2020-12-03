@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-require("./appSetup");
+import "./appSetup";
 
-const commander = require("commander");
-
-const { Command } = prequire("lib/commands");
+import commander from "commander";
+import { Command } from "lib/commands";
 
 const program = new commander.Command();
 program.version("0.0.1");

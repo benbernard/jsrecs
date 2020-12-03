@@ -1,48 +1,74 @@
-const commander = require("commander");
-const Command = prequire("lib/command");
-const { GeneratorStream } = prequire("lib/generatorStream");
+import commander from "commander";
+import {
+  Command,
+  CommandConstructorArgs,
+  actionHandlerArgs,
+} from "lib/command";
+import { GeneratorStream } from "lib/generatorStream";
+import Record from "lib/record";
 
-exports.runCommand = function (args) {
+export function runCommand<T extends typeof TestedCommand>(
+  args: string[],
+  Cmd: T
+): InstanceType<T> {
   const program = new commander.Command();
   Command.buildProgram(program, true);
   program.parse(["node", "script", ...args]);
+  return Cmd.lastCommand as InstanceType<T>;
+}
 
-  return program.lastCommandInstance;
-};
+class CollectingOutputStream extends GeneratorStream<Record, void> {
+  records: Record[] = [];
 
-class CollectingOutputStream extends GeneratorStream {
   constructor() {
     super();
-    this.records = [];
   }
 
-  handle(record) {
+  async handle(record): Promise<void> {
     this.records.push(record);
   }
 }
 
-exports.testifyCommand = function (klass) {
+class TestedCommand extends Command {
+  static lastCommand: TestedCommand;
+  donePromise: Promise<Record[]>;
+}
+
+export function testifyCommand(klass: typeof Command): typeof TestedCommand {
   const spec = klass.spec;
 
   class SubClass extends klass {
-    constructor(...args) {
-      super(...args);
+    static lastCommand: TestedCommand;
+    donePromise: Promise<Record[]>;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    constructor(...args: any[]) {
+      super(args[0], ...args.slice(1));
+
       this.donePromise = new Promise((resolve, reject) => {
         this.resolve = resolve;
         this.reject = reject;
       });
+
+      SubClass.lastCommand = this;
     }
 
-    async run(...args) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolve: (any) => any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    reject: (any) => any;
+
+    async run() {
       try {
-        await super.run(...args);
+        await super.run();
         this.resolve(this.outputGenerator().records);
       } catch (err) {
         this.reject(err);
       }
     }
 
-    outputGenerator() {
+    _outputGenerator: CollectingOutputStream;
+    outputGenerator(): CollectingOutputStream {
       return (this._outputGenerator ??= new CollectingOutputStream());
     }
   }
@@ -56,4 +82,4 @@ exports.testifyCommand = function (klass) {
   });
 
   return SubClass;
-};
+}

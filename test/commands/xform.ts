@@ -1,19 +1,17 @@
-const Xform = prequire("lib/commands/xformCommand"); // Must require in order to get it to register
-const Command = prequire("lib/command");
-const { runCommand, testifyCommand } = require("./helper");
-const { testFile } = prequire("test/testSetup");
+import Xform from "lib/commands/xformCommand";
+import { runCommand, testifyCommand } from "./helper";
+import { testFile } from "test/testSetup";
 
 describe("Xform Command", () => {
-  testifyCommand(Xform);
+  let TestXform = testifyCommand(Xform);
 
   it("should instantiate xform command", async () => {
-    const lastCommand = runCommand([
-      "xform",
-      'r.b = "foo"',
-      testFile("simple.recs"),
-    ]);
+    const lastCommand = runCommand(
+      ["xform", 'r.b = "foo"', testFile("simple.recs")],
+      TestXform
+    );
 
-    let records = await lastCommand.donePromise;
+    let records = await TestXform.lastCommand.donePromise;
 
     expect(lastCommand).to.be.instanceof(Xform);
     expect(records).to.be.records([
@@ -23,13 +21,16 @@ describe("Xform Command", () => {
   });
 
   it("should allow global variables", async () => {
-    const lastCommand = runCommand([
-      "xform",
-      "global.count ??=0; count++; r.b = count",
-      testFile("simple.recs"),
-    ]);
+    const lastCommand = runCommand(
+      [
+        "xform",
+        "global.count ??=0; count++; r.b = count",
+        testFile("simple.recs"),
+      ],
+      TestXform
+    );
 
-    let records = await lastCommand.donePromise;
+    let records = await TestXform.lastCommand.donePromise;
 
     expect(lastCommand).to.be.instanceof(Xform);
     expect(records).to.be.records([

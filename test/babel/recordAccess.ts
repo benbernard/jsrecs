@@ -1,6 +1,6 @@
-const outdent = require("outdent");
-const recordAccess = prequire("lib/babel/recordAccess");
-const { babelTestCode } = require("./helper");
+import outdent from "outdent";
+import recordAccess from "lib/babel/recordAccess";
+import { babelTestCode } from "./helper";
 
 const testCode = function (input, expected) {
   return babelTestCode(input, expected, { plugins: [recordAccess] });

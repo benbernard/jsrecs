@@ -1,6 +1,10 @@
-const babel = require("@babel/core");
+import { transform, TransformOptions } from "@babel/core";
 
-exports.babelTestCode = function testCode(input, expected, opts) {
-  let { code } = babel.transform(input, opts);
+export function babelTestCode(
+  input: string,
+  expected: string,
+  opts: TransformOptions
+): void {
+  let { code } = transform(input, opts);
   expect(code).to.equal(expected);
-};
+}

@@ -1,9 +1,12 @@
-const Record = (module.exports = class Record {
-  constructor(obj) {
-    this.data = obj;
-  }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RecordData = globalThis.Record<string, unknown>;
 
-  toJSON() {
+export default class Record {
+  constructor(public data: RecordData) {}
+
+  toJSON(): RecordData {
     return this.data;
   }
-});
+}
+
+export { Record };

@@ -1,7 +1,31 @@
-const requireDir = require("require-dir");
+import Command from "lib/command";
+export { Command };
 
-const Command = prequire("lib/command");
-exports.Command = Command;
+// Put all exports here
+export * from "lib/commands/xformCommand";
 
-const modules = requireDir(__dirname);
-exports.commands = _.values(modules);
+// Check all exports
+import path from "path";
+import fs from "fs";
+
+let filenames = new Set();
+
+// Check that all commands specify a non-default filename
+for (let command of Command.commands.values()) {
+  if (command.hasDefaultFilename()) {
+    throw new Error(
+      `${command} with spec ${command.spec} has default filename!`
+    );
+  }
+
+  filenames.add(path.basename(command.filename));
+}
+
+// Check that all paths were imported
+fs.readdirSync(__dirname).forEach(file => {
+  if (!filenames.has(file)) {
+    throw new Error(
+      `Could not find ${file} in command registry, did you remember to export it in index.ts?`
+    );
+  }
+});

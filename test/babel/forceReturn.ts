@@ -1,6 +1,6 @@
-const outdent = require("outdent");
-const forceReturn = prequire("lib/babel/forceReturn");
-const { babelTestCode } = require("./helper");
+import outdent from "outdent";
+import forceReturn from "lib/babel/forceReturn";
+import { babelTestCode } from "./helper";
 
 const testCode = function (input, expected) {
   return babelTestCode(

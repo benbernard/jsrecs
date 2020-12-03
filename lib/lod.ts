@@ -1,3 +1,4 @@
 // This will house any lodash custom functions
 
-const _ = (module.exports = require("lodash"));
+import _ from "lodash";
+export default _;
