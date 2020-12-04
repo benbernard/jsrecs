@@ -13,7 +13,7 @@ export default class XformCommand extends Command {
   }
 
   async run(): Promise<void> {
-    this.recordGenerator()
+    await this.recordGenerator()
       .pipe(this.generator)
       .pipe(this.outputGenerator())
       .exhaust();

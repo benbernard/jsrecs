@@ -41,5 +41,5 @@ export async function collectStream(
 }
 
 export function testFile(file: string): string {
-  return projpath(path.join("test/files", file));
+  return projpath(path.join("../../test/files", file));
 }
