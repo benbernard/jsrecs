@@ -1,4 +1,5 @@
 module.exports = {
   recursive: true,
-  require: ["./appSetup.js", "./test/testSetup.js"],
+  require: ["./build/lib/appSetup.js", "./build/test/testSetup.js"],
+  spec: "build/test",
 };

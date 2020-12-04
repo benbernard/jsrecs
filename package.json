@@ -9,7 +9,9 @@
   "scripts": {
     "test": "`npm bin`/mocha --recursive",
     "testd": "node inspect `npm bin`/mocha --recursive",
-    "lint": "npx eslint --ext ts ."
+    "lint": "npx eslint --ext ts .",
+    "check-env": "node -e 'console.log(process.env)' | grep npm",
+    "build": "`yarn bin`/tsc"
   },
   "keywords": [
     "json",
