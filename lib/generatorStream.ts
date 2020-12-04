@@ -42,27 +42,6 @@ export class GeneratorStream<Source, Target> implements AsyncIterable<Target> {
 
 export class OutputStream extends GeneratorStream<Record, void> {
   async handle(data: Record): Promise<void> {
-    console.log(data);
+    console.log(JSON.stringify(data));
   }
 }
-
-// TODO: remove
-// export function pipeline(
-//   ...generatorStreams: GeneratorStream<unknown, unknown>[]
-// ): GeneratorStream<unknown, unknown> {
-//   if (generatorStreams.length <= 1) {
-//     throw new Error(
-//       `Pipeline called with only ${generatorStreams.length} streams`
-//     );
-//   }
-//
-//   let last = generatorStreams.pop();
-//   let previous = last;
-//
-//   for (let generator of generatorStreams.reverse()) {
-//     previous.pipeFrom(generator);
-//     previous = generator;
-//   }
-//
-//   return last;
-// }

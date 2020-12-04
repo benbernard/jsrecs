@@ -1,4 +1,0 @@
-1. Support json5
-2. precommit checks
-3. Support multi-line single documents -> parser?
-4. Write tests for command and command args parsing

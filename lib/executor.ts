@@ -1,4 +1,4 @@
-import babel from "@babel/core";
+import * as babel from "@babel/core";
 import recordAccess from "lib/babel/recordAccess";
 import _ from "lib/lod";
 import Record from "lib/record";
