@@ -6,7 +6,8 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "module": "commonjs",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "inlineSourceMap": true,
   },
   "include": ["./*.ts", "./lib/**/*", "./test/**/*"]
 }

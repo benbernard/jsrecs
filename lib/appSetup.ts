@@ -13,6 +13,10 @@ tsConfigPaths.register({
   paths: {},
 });
 
+// Setup source maps
+import "source-map-support/register";
+
+// Helpers for paths
 export const appRoot = path.resolve(__dirname);
 
 export function projpath(src: string): string {
