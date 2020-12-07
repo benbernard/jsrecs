@@ -1,5 +1,7 @@
 ## Current list
 
+1. Write tests for error cases
+1. Make jsrecs coding errors display actual code (stripped by PrettyError)
 1. Support json5
 2. precommit checks
 3. Support multi-line single documents -> parser?

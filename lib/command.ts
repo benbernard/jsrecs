@@ -38,6 +38,11 @@ export default class Command {
     return (this._outputGenerator ??= new OutputStream());
   }
 
+  bail(message: string, code = 1) {
+    console.error(message);
+    process.exit(1);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   static setupOptions(command: commander.Command): void {}
 

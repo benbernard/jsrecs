@@ -29,8 +29,11 @@
     "lodash": "^4.17.20",
     "multistream": "^4.0.1",
     "ndjson": "^2.0.0",
+    "ololog": "^1.1.164",
     "outdent": "^0.7.1",
+    "pretty-error": "^2.1.2",
     "source-map-support": "^0.5.19",
+    "stacktracey": "^2.0.15",
     "typescript": "^4.1.2"
   },
   "devDependencies": {

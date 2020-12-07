@@ -1,6 +1,8 @@
 import { Command, CommandConstructorArgs } from "lib/command";
 import Xform from "lib/operations/xform";
 import commander from "commander";
+import { ExecutorParseError, ExecutorEvalError } from "lib/executor";
+import log from "ololog";
 
 export default class XformCommand extends Command {
   generator: Xform;
@@ -9,7 +11,27 @@ export default class XformCommand extends Command {
   constructor(opts: CommandConstructorArgs, snippet: string) {
     super(opts);
     this.snippet = snippet;
-    this.generator = new Xform({ code: snippet });
+
+    try {
+      this.generator = new Xform({
+        code: snippet,
+        onError: e => this.onError(e),
+      });
+    } catch (e) {
+      if (e instanceof ExecutorParseError) {
+        this.bail(e.prettyError());
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  onError(e: Error): void {
+    if (e instanceof ExecutorEvalError) {
+      log.bright.red.error.noLocate(e.prettyError());
+    } else {
+      throw e;
+    }
   }
 
   async run(): Promise<void> {

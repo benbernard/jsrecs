@@ -16,6 +16,28 @@ tsConfigPaths.register({
 // Setup source maps
 import "source-map-support/register";
 
+// Better error display
+import PrettyError from "pretty-error";
+const pe = new PrettyError();
+pe.appendStyle({
+  "pretty-error > trace": {},
+  "pretty-error > trace > item": {
+    margin: 0,
+  },
+});
+
+process.on("uncaughtException", function (error) {
+  console.error(pe.render(error));
+});
+
+process.on("unhandledRejection", function (error) {
+  console.error(pe.render(error));
+});
+
+// Better error display
+// import ololog from "ololog";
+// ololog.handleNodeErrors();
+
 // Helpers for paths
 export const appRoot = path.resolve(__dirname);
 

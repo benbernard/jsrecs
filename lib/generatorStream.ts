@@ -1,24 +1,36 @@
 import Record from "lib/record";
 
-export class GeneratorStream<Source, Target> implements AsyncIterable<Target> {
-  generator: AsyncIterable<Source>;
+type ErrorHandler = (Error) => void;
 
-  constructor({ generator = null } = {}) {
-    this.generator = null;
-    if (generator) this.pipeFrom(generator);
+function defaultErrorHandler(e: Error): void {
+  throw e;
+}
+
+export class GeneratorStream<Source, Target> implements AsyncIterable<Target> {
+  source: AsyncIterable<Source>;
+  onError: ErrorHandler;
+
+  constructor({ source = null, onError = defaultErrorHandler } = {}) {
+    this.source = null;
+    if (source) this.pipeFrom(source);
+    this.onError = onError;
   }
 
-  pipeFrom(generator: AsyncIterable<Source>): void {
-    if (this.generator) {
-      throw new Error(`GeneratorStream already has a geneator!`);
+  pipeFrom(source: AsyncIterable<Source>): void {
+    if (this.source) {
+      throw new Error(`GeneratorStream already has a source!`);
     }
 
-    this.generator = generator;
+    this.source = source;
   }
 
   async * [Symbol.asyncIterator](): AsyncGenerator<Target> {
-    for await (let data of this.generator) {
-      yield await this.handle(data);
+    for await (let data of this.source) {
+      try {
+        yield await this.handle(data);
+      } catch (e) {
+        this.onError(e);
+      }
     }
   }
 
@@ -33,10 +45,10 @@ export class GeneratorStream<Source, Target> implements AsyncIterable<Target> {
   }
 
   pipe(
-    stream: GeneratorStream<Target, unknown>
+    target: GeneratorStream<Target, unknown>
   ): GeneratorStream<Target, unknown> {
-    stream.pipeFrom(this);
-    return stream;
+    target.pipeFrom(this);
+    return target;
   }
 }
 

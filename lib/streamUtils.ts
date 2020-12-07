@@ -46,7 +46,7 @@ function recordGenerator(argOpts = {}): RecordGeneratorStream {
     ...argOpts,
   });
 
-  return new RecordGeneratorStream({ generator: objStream });
+  return new RecordGeneratorStream({ source: objStream });
 }
 
 function s<T extends Stream>(stream: T): T {
