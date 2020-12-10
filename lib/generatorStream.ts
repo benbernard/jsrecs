@@ -45,16 +45,23 @@ export class GeneratorStream<Source, Target> implements AsyncIterable<Target> {
     }
   }
 
-  pipe(
-    target: GeneratorStream<Target, unknown>
-  ): GeneratorStream<Target, unknown> {
+  pipe<NewT>(
+    target: GeneratorStream<Target, NewT>
+  ): GeneratorStream<Target, NewT> {
     target.pipeFrom(this);
     return target;
   }
 }
+export default GeneratorStream;
 
 export class OutputStream extends GeneratorStream<Record, void> {
   async handle(data: Record): Promise<void> {
     logger.bareLogger(JSON.stringify(data));
+  }
+}
+
+export class DirectOutputStream extends GeneratorStream<any, void> {
+  async handle(data: any): Promise<void> {
+    logger.bareLogger(data);
   }
 }

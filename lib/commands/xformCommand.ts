@@ -3,35 +3,18 @@ import Xform from "lib/operations/xform";
 import commander from "commander";
 import { ExecutorParseError, ExecutorEvalError } from "lib/executor";
 import logger from "lib/log";
+import SnippetCommand from "lib/snippetCommand";
 
-export default class XformCommand extends Command {
-  generator: Xform;
-  snippet: string;
-
+export default class XformCommand extends SnippetCommand<Xform> {
   constructor(opts: CommandConstructorArgs, snippet: string) {
-    super(opts);
-    this.snippet = snippet;
-
-    try {
-      this.generator = new Xform({
-        code: snippet,
-        onError: e => this.onError(e),
-      });
-    } catch (e) {
-      if (e instanceof ExecutorParseError) {
-        logger.bail(e.prettyError());
-      } else {
-        throw e;
-      }
-    }
+    super(opts, snippet);
   }
 
-  onError(e: Error): void {
-    if (e instanceof ExecutorEvalError) {
-      logger.log.bright.red.error.noLocate(e.prettyError());
-    } else {
-      throw e;
-    }
+  createGenerator(errorHandler) {
+    return new Xform({
+      code: this.snippet,
+      onError: errorHandler,
+    });
   }
 
   async run(): Promise<void> {

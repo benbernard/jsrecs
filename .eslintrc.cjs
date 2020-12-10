@@ -23,6 +23,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-undef": ["error", { typeof: false }],
     "no-unused-vars": "off",
     "accessor-pairs": "error",

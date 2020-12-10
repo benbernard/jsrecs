@@ -3,6 +3,7 @@ export { Command };
 
 // Put all exports here
 export * from "lib/commands/xformCommand";
+export * from "lib/commands/evalCommand";
 
 // Check all exports
 import path from "path";

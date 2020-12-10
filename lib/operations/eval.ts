@@ -1,9 +1,8 @@
 import SnippetOperation from "lib/operations/snippetOperation";
 import Record from "lib/record";
 
-export default class Xform extends SnippetOperation<Record, Record> {
+export default class Eval extends SnippetOperation<Record, any> {
   async handle(record: Record): Promise<Record> {
-    this.executor.run(record);
-    return record;
+    return this.executor.run(record);
   }
 }
