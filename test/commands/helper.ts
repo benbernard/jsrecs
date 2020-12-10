@@ -6,7 +6,7 @@ import {
 } from "lib/command";
 import { GeneratorStream } from "lib/generatorStream";
 import Record from "lib/record";
-import * as logging from "lib/log";
+import logger from "lib/log";
 import { Readable } from "stream";
 import { recordGenerator } from "lib/streamUtils";
 
@@ -16,8 +16,16 @@ export async function runCommand(args: string[]): Promise<void> {
   await program.parseAsync(["node", "script", ...args]);
 }
 
+enum LogLevel {
+  Log = "log",
+  Warn = "error",
+  Error = "warn",
+  Debug = "debug",
+  Info = "info",
+}
+
 export class Result {
-  logLines: string[];
+  logLines: globalThis.Record<LogLevel, string[]>;
   consoleLines: string[];
   bailMessage: string;
 
@@ -29,7 +37,14 @@ export class Result {
   }
 
   reset(): void {
-    this.logLines = [];
+    this.logLines = {
+      log: [],
+      warn: [],
+      error: [],
+      debug: [],
+      info: [],
+    };
+
     this.consoleLines = [];
     this.bailMessage = null;
     this.errored = false;
@@ -50,22 +65,33 @@ export class Result {
   }
 }
 
+export class BailError extends Error {
+  constructor(msg: string) {
+    super(msg);
+    this.name = this.constructor.name;
+  }
+}
+
 export function setupCommandTest(): Result {
   let result = new Result();
 
   before(() => {
-    logging.pushLogConfig({
-      render(text, { consoleMethod = "" }) {
-        result.logLines.push(text);
+    logger.pushAll({
+      config: {
+        render(
+          text: string,
+          { consoleMethod = LogLevel.Log }: { consoleMethod: LogLevel }
+        ) {
+          result.logLines[consoleMethod].push(text);
+        },
       },
-    });
-
-    logging.pushBareLogger((...args: any[]) => {
-      result.consoleLines.push(args.join(" "));
-    });
-
-    logging.pushBail(message => {
-      result.bailMessage = message;
+      bareLogger: (...args: any[]) => {
+        result.consoleLines.push(args.join(" "));
+      },
+      bailHandler: message => {
+        result.bailMessage = message;
+        throw new BailError(message);
+      },
     });
   });
 
@@ -74,9 +100,7 @@ export function setupCommandTest(): Result {
   });
 
   after(() => {
-    logging.popLog();
-    logging.popBareLogger();
-    logging.popBail();
+    logger.popAll();
   });
 
   return result;

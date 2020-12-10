@@ -26,14 +26,14 @@ pe.appendStyle({
   },
 });
 
-import log from "lib/log";
+import logger from "lib/log";
 
 process.on("uncaughtException", function (error) {
-  log.error.noLocate(pe.render(error));
+  logger.log.error.noLocate(pe.render(error));
 });
 
 process.on("unhandledRejection", function (error) {
-  log.error.noLocate(pe.render(error));
+  logger.log.error.noLocate(pe.render(error));
 });
 
 // Helpers for paths

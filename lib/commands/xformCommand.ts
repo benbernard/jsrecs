@@ -2,7 +2,7 @@ import { Command, CommandConstructorArgs } from "lib/command";
 import Xform from "lib/operations/xform";
 import commander from "commander";
 import { ExecutorParseError, ExecutorEvalError } from "lib/executor";
-import log, { bail } from "lib/log";
+import logger from "lib/log";
 
 export default class XformCommand extends Command {
   generator: Xform;
@@ -19,7 +19,7 @@ export default class XformCommand extends Command {
       });
     } catch (e) {
       if (e instanceof ExecutorParseError) {
-        bail(e.prettyError());
+        logger.bail(e.prettyError());
       } else {
         throw e;
       }
@@ -28,7 +28,7 @@ export default class XformCommand extends Command {
 
   onError(e: Error): void {
     if (e instanceof ExecutorEvalError) {
-      log.bright.red.error.noLocate(e.prettyError());
+      logger.log.bright.red.error.noLocate(e.prettyError());
     } else {
       throw e;
     }

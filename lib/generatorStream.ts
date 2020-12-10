@@ -1,5 +1,5 @@
 import Record from "lib/record";
-import { bareLogger } from "lib/log";
+import logger from "lib/log";
 
 type ErrorHandler = (Error) => void;
 
@@ -55,6 +55,6 @@ export class GeneratorStream<Source, Target> implements AsyncIterable<Target> {
 
 export class OutputStream extends GeneratorStream<Record, void> {
   async handle(data: Record): Promise<void> {
-    bareLogger(JSON.stringify(data));
+    logger.bareLogger(JSON.stringify(data));
   }
 }

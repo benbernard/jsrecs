@@ -1,4 +1,5 @@
 import Chai from "chai";
+import chaiAsPromised from "chai-as-promised";
 import path = require("path");
 import streams from "stream";
 
@@ -6,6 +7,7 @@ import Record from "lib/record";
 import { projpath } from "lib/appSetup";
 
 export const chai = Chai;
+chai.use(chaiAsPromised);
 
 declare global {
   var expect: typeof chai.expect;
