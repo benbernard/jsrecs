@@ -6,80 +6,78 @@ import {
 } from "lib/command";
 import { GeneratorStream } from "lib/generatorStream";
 import Record from "lib/record";
+import * as logging from "lib/log";
+import { Readable } from "stream";
+import { recordGenerator } from "lib/streamUtils";
 
-export function runCommand<T extends typeof TestedCommand>(
-  args: string[],
-  Cmd: T
-): InstanceType<T> {
+export async function runCommand(args: string[]): Promise<void> {
   const program = new commander.Command();
   Command.buildProgram(program, true);
-  program.parse(["node", "script", ...args]);
-  return Cmd.lastCommand as InstanceType<T>;
+  await program.parseAsync(["node", "script", ...args]);
 }
 
-class CollectingOutputStream extends GeneratorStream<Record, void> {
-  records: Record[] = [];
+export class Result {
+  logLines: string[];
+  consoleLines: string[];
+  bailMessage: string;
+
+  errored = false;
+  thrownError: Error;
 
   constructor() {
-    super();
+    this.reset();
   }
 
-  async handle(record): Promise<void> {
-    this.records.push(record);
+  reset(): void {
+    this.logLines = [];
+    this.consoleLines = [];
+    this.bailMessage = null;
+    this.errored = false;
+    this.thrownError = null;
+  }
+
+  async records(): Promise<Record[]> {
+    let generator = recordGenerator({
+      streams: this.consoleLines.map(line => Readable.from(line)),
+    });
+
+    let records = [];
+    for await (let record of generator) {
+      records.push(record);
+    }
+
+    return records;
   }
 }
 
-class TestedCommand extends Command {
-  static lastCommand: TestedCommand;
-  donePromise: Promise<Record[]>;
-}
-
-export function testifyCommand(klass: typeof Command): typeof TestedCommand {
-  const spec = klass.spec;
-
-  class SubClass extends klass {
-    static lastCommand: TestedCommand;
-    donePromise: Promise<Record[]>;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(...args: any[]) {
-      super(args[0], ...args.slice(1));
-
-      this.donePromise = new Promise((resolve, reject) => {
-        this.resolve = resolve;
-        this.reject = reject;
-      });
-
-      SubClass.lastCommand = this;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolve: (any) => any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    reject: (any) => any;
-
-    async run() {
-      try {
-        await super.run();
-        this.resolve(this.outputGenerator().records);
-      } catch (err) {
-        this.reject(err);
-      }
-    }
-
-    _outputGenerator: CollectingOutputStream;
-    outputGenerator(): CollectingOutputStream {
-      return (this._outputGenerator ??= new CollectingOutputStream());
-    }
-  }
+export function setupCommandTest(): Result {
+  let result = new Result();
 
   before(() => {
-    Command.register(SubClass, spec, true);
+    logging.pushLogConfig({
+      render(text, { consoleMethod = "" }) {
+        result.logLines.push(text);
+      },
+    });
+
+    logging.pushBareLogger((...args: any[]) => {
+      result.consoleLines.push(args.join(" "));
+    });
+
+    logging.pushBail(message => {
+      result.bailMessage = message;
+    });
+  });
+
+  beforeEach(() => {
+    result.reset();
   });
 
   after(() => {
-    Command.register(klass, spec, true);
+    logging.popLog();
+    logging.popBareLogger();
+    logging.popBail();
   });
 
-  return SubClass;
+  return result;
 }

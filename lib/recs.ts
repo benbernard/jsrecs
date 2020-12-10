@@ -5,9 +5,12 @@ import "./appSetup";
 import commander from "commander";
 import { Command } from "lib/commands";
 
-const program = new commander.Command();
-program.version("0.0.1");
+async function main() {
+  const program = new commander.Command();
+  program.version("0.0.1");
 
-Command.buildProgram(program);
+  Command.buildProgram(program);
+  await program.parseAsync(process.argv);
+}
 
-program.parse(process.argv);
+main();

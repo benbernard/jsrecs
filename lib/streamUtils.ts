@@ -6,7 +6,7 @@ import ndjson from "ndjson";
 import { Record, RecordData } from "lib/record";
 import { GeneratorStream } from "lib/generatorStream";
 
-function multiStreamForArgs({
+export function multiStreamForArgs({
   files = [],
   streams = [process.stdin],
   separator = "",
@@ -25,7 +25,7 @@ function multiStreamForArgs({
   return s(new MultiStream(separatedStreams));
 }
 
-function objStreamFromArgs(argOpts = {}): ReturnType<ndjson.parse> {
+export function objStreamFromArgs(argOpts = {}): ReturnType<ndjson.parse> {
   const multiStream = multiStreamForArgs(argOpts);
 
   const stream = s(ndjson.parse());
@@ -40,7 +40,7 @@ export class RecordGeneratorStream extends GeneratorStream<RecordData, Record> {
   }
 }
 
-function recordGenerator(argOpts = {}): RecordGeneratorStream {
+export function recordGenerator(argOpts = {}): RecordGeneratorStream {
   let objStream = objStreamFromArgs({
     separator: "\n",
     ...argOpts,
@@ -49,11 +49,9 @@ function recordGenerator(argOpts = {}): RecordGeneratorStream {
   return new RecordGeneratorStream({ source: objStream });
 }
 
-function s<T extends Stream>(stream: T): T {
+export function s<T extends Stream>(stream: T): T {
   stream.on("error", err => {
     throw err;
   });
   return stream;
 }
-
-export { multiStreamForArgs, objStreamFromArgs, recordGenerator, s };

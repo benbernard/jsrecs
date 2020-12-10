@@ -11,7 +11,8 @@
     "testd": "node inspect `npm bin`/mocha --recursive",
     "lint": "npx eslint --ext ts .",
     "check-env": "node -e 'console.log(process.env)' | grep npm",
-    "build": "`yarn bin`/tsc"
+    "build": "`yarn bin`/tsc",
+    "clean": "rm -rf build; mkdir build"
   },
   "keywords": [
     "json",

@@ -26,17 +26,15 @@ pe.appendStyle({
   },
 });
 
+import log from "lib/log";
+
 process.on("uncaughtException", function (error) {
-  console.error(pe.render(error));
+  log.error.noLocate(pe.render(error));
 });
 
 process.on("unhandledRejection", function (error) {
-  console.error(pe.render(error));
+  log.error.noLocate(pe.render(error));
 });
-
-// Better error display
-// import ololog from "ololog";
-// ololog.handleNodeErrors();
 
 // Helpers for paths
 export const appRoot = path.resolve(__dirname);

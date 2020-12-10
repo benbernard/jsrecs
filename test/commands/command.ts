@@ -1,5 +1,5 @@
 import Command from "lib/command";
-import { runCommand, testifyCommand } from "./helper";
+import { runCommand } from "./helper";
 import Record from "lib/record";
 
 class TestCommand extends Command {
@@ -17,31 +17,36 @@ class TestCommand extends Command {
     TestCommand.lastCommand = this;
   }
 
-  run() {
+  async run() {
     this.hasRun = true;
   }
 }
-Command.register(TestCommand, "test <input> [optional]");
+
+const spec = "test <input> [optional]";
 
 describe("Command", () => {
-  it("should initialize a TestCommand", () => {
-    const lastCommand = runCommand(
-      ["test", "myInput", "myOptional"],
-      TestCommand
-    );
-    expect(lastCommand.input).to.equal("myInput");
-    expect(lastCommand.optional).to.equal("myOptional");
-    expect(lastCommand.hasRun).to.be.true;
+  before(() => {
+    Command.register(TestCommand, spec);
   });
 
-  it("should initialize a TestCommand with extra args", () => {
-    const lastCommand = runCommand(
-      ["test", "myInput", "myOptional", "extra"],
-      TestCommand
-    );
-    expect(lastCommand.input).to.equal("myInput");
-    expect(lastCommand.optional).to.equal("myOptional");
-    expect(lastCommand.args).to.deep.equal(["extra"]);
-    expect(lastCommand.hasRun).to.be.true;
+  it("should initialize a TestCommand", async () => {
+    await runCommand(["test", "myInput", "myOptional"]);
+
+    expect(TestCommand.lastCommand.input).to.equal("myInput");
+    expect(TestCommand.lastCommand.optional).to.equal("myOptional");
+    expect(TestCommand.lastCommand.hasRun).to.be.true;
+  });
+
+  it("should initialize a TestCommand with extra args", async () => {
+    await runCommand(["test", "myInput", "myOptional", "extra"]);
+
+    expect(TestCommand.lastCommand.input).to.equal("myInput");
+    expect(TestCommand.lastCommand.optional).to.equal("myOptional");
+    expect(TestCommand.lastCommand.args).to.deep.equal(["extra"]);
+    expect(TestCommand.lastCommand.hasRun).to.be.true;
+  });
+
+  after(() => {
+    Command.deregister(TestCommand);
   });
 });

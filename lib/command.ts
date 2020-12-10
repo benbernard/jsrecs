@@ -24,7 +24,7 @@ export default class Command {
     this.args = args;
   }
 
-  run(): void {
+  async run(): Promise<void> {
     throw new Error(`Subclass should implement`);
   }
 
@@ -38,15 +38,12 @@ export default class Command {
     return (this._outputGenerator ??= new OutputStream());
   }
 
-  bail(message: string, code = 1) {
-    console.error(message);
-    process.exit(1);
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   static setupOptions(command: commander.Command): void {}
 
-  static handleAction<T extends Command>(...args: actionHandlerArgs): T {
+  static async handleAction<T extends Command>(
+    ...args: actionHandlerArgs
+  ): Promise<T> {
     let extraArgs = args.pop();
     let command;
     if (_.isArray(extraArgs)) {
@@ -63,7 +60,7 @@ export default class Command {
       },
       ...args
     );
-    instance.run();
+    await instance.run();
     return instance as T;
   }
 
@@ -92,6 +89,14 @@ export default class Command {
     Command.commands.set(spec, subclass);
   }
 
+  static deregister(spec: string | typeof Command): void {
+    if (typeof spec === "string") {
+      Command.commands.delete(spec);
+    } else if (spec instanceof Command) {
+      Command.commands.delete(spec.spec);
+    }
+  }
+
   static buildProgram(
     program: commander.Command,
     trackInstances = false
@@ -99,8 +104,8 @@ export default class Command {
     for (let [spec, klass] of Command.commands.entries()) {
       let command = program.command(spec);
       klass.setupOptions(command);
-      command.action(function (...args) {
-        const instance = klass.handleAction(...args);
+      command.action(async function (...args) {
+        const instance = await klass.handleAction(...args);
         if (trackInstances) program.lastCommandInstance = instance;
       });
     }
